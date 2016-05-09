@@ -12,12 +12,14 @@ class DataController extends Controller
 {
     public function testDatabase(){
         $query1 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
+        # Testing
+        $query2 = $this->disasterChanges("D003", null);
         $query3 = $this->victimMovement("111-56-8948");
         $query4 = $this->villageAffected("D001", "banjir", "2015-07-23", "2015-07-24");
         $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
         $query6 = $this->refugeeCamp("village", "Sawahan");
         $query7 = $this->medicalFacility("village", "Sawahan");
-    	return $query4;
+    	return $query2;
     }
 
     # Query no 1
@@ -49,6 +51,51 @@ class DataController extends Controller
 
         $event = DB::select(DB::raw($query));
         return $event;
+    }
+
+    # Query no 2
+    private function disasterChanges($disaster, $type){
+        $query = "SELECT start_time, end_time, geom FROM disaster_coverage WHERE disaster_coverage.disaster_id='{$disaster}'";
+
+        if(isset($type)){
+            $query = "{$query} AND disaster_coverage.disaster_type='{$type}'";
+        }
+
+        $intimes = DB::select(DB::raw($query));
+
+        $timeArray = array();
+        foreach ($intimes as $row) {
+            array_push($timeArray, $row->start_time);
+            array_push($timeArray, $row->end_time);
+        }
+        array_multisort($timeArray);
+        $timeUniqueArray = array();
+        $tSize = sizeof($timeArray);
+        if($tSize>0){
+            array_push($timeUniqueArray, $timeArray[0]);
+            for($i=1; $i<$tSize; $i++){
+                if(end($timeUniqueArray) != $timeArray[$i]){
+                    array_push($timeUniqueArray, $timeArray[$i]);
+                }
+            }
+        }
+
+        $result = array();
+        for($i=1; $i<sizeof($timeArray); $i++){
+            $query = "SELECT disaster_id, ST_AsGeoJSON(ST_Collect(geom)) FROM disaster_coverage WHERE disaster_id = '{$disaster}'";
+            if(isset($type)){
+                $query = "{$query} AND disaster_type='{$type}'";
+            }
+            $start_timestamp = $timeArray[$i-1];
+            $end_timestamp = $timeArray[$i];
+            $query = "{$query} AND ((NOT (disaster_coverage.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < disaster_coverage.start_time AND '{$end_timestamp}'::timestamp < disaster_coverage.start_time)) OR (disaster_coverage.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > disaster_coverage.end_time OR '{$end_timestamp}'::timestamp < disaster_coverage.start_time)))";
+            $query = "{$query} GROUP BY disaster_id";
+            $region = DB::select(DB::raw($query));
+            array_push($result, array("start_time" => $start_timestamp, 
+                "end_time" => $end_timestamp ,"region" => $region));
+        }
+        
+        return $result;
     }
 
     # Query no 3
