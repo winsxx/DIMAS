@@ -23,7 +23,7 @@ class DataController extends Controller
         # Testing
         $query2 = $this->disasterChanges("D003", null);
         $query3 = $this->victimMovement("111-56-8948");
-        $query4 = $this->villageAffected("D001", "banjir", "2015-07-23", "2015-07-24");
+        $query4 = $this->villageAffected("D003", "banjir", "2015-07-23", "2015-07-24");
         $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
         $query6 = $this->refugeeCamp("village", "Sawahan");
         $query7 = $this->medicalFacility("village", "Sawahan");
@@ -39,7 +39,8 @@ class DataController extends Controller
             "2015-07-23", "2015-07-24", "missing");
     	// return $query8status;
 
-        return view('query3')->with('result',$query3);
+        var_dump($query4);
+        return view('query4')->with('result',$query4);
     }
 
     # Query no 3
@@ -143,7 +144,10 @@ class DataController extends Controller
             $query = "{$query} AND ((NOT (disaster_coverage.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < disaster_coverage.start_time AND '{$end_timestamp}'::timestamp < disaster_coverage.start_time)) OR (disaster_coverage.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > disaster_coverage.end_time OR '{$end_timestamp}'::timestamp < disaster_coverage.start_time)))";
         }
 
+        // var_dump($query);
+
         $villageList = DB::select(DB::raw($query));
+        // var_dump($villageList);
         return $villageList;
     }
 
