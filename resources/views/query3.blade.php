@@ -9,10 +9,15 @@
 
         <link rel="stylesheet" href="{{ URL::asset('leaflet/leaflet.css')}}" />
 
+        <link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
+
     </head>
     <body>
         <div id="mapid"></div>
+
         <script src="{{ URL::asset('leaflet/leaflet-src.js')}}"></script>
+        <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+
             @foreach ($result as $res)
                 <script type="text/javascript">
 
@@ -24,55 +29,65 @@
                     console.log(init_coor);
                     console.log(init_coor[0]);
 
-                    var mapid = L.map('mapid').setView(init_coor[0], 13);
+                    L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw';
+                    var mapid = L.mapbox.map('mapid', 'mapbox.streets').setView([init_coor[0][1], init_coor[0][0]] , 7);
 
-                    var freeJson = {
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [init_coor[0][1], init_coor[0][0]]
-                        },
-                    };
+                    if (init_coor.length == 1){
+                        var freeJson = {
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": init_coor[0]
+                            },
+                        };
 
-                    // var freeJson2 = {
-                    //     "type": "Feature",
-                    //     "geometry": {
-                    //         "type": "LineString",
-                    //         "coordinates": [
-                    //                     [-7.86201446, 112.9],
-                    //                     [-7.9, 113.1]
-                    //         ]
-                    //     },
-                    // };
+                        // var freeJson2 = {
+                        //     "type": "Feature",
+                        //     "geometry": {
+                        //         "type": "LineString",
+                        //         "coordinates": [
+                        //                     [-7.86201446, 112.9],
+                        //                     [-7.9, 113.1]
+                        //         ]
+                        //     },
+                        // };
 
-                    // console.log(mapid);
-                    console.log(freeJson);
-                    // console.log(freeJson2);
-                    console.log(freeJson['geometry']);
-                    // console.log(freeJson2['geometry']);
-                    console.log(freeJson['geometry']['coordinates'][0]);
-                    console.log(freeJson['geometry']['coordinates'][1]);
+                        // console.log(mapid);
+                        console.log(freeJson);
+                        // console.log(freeJson2);
+                        console.log(freeJson['geometry']);
+                        // console.log(freeJson2['geometry']);
+                        console.log(freeJson['geometry']['coordinates'][0]);
+                        console.log(freeJson['geometry']['coordinates'][1]);
 
-                    // var asal = L.geoJson().addTo(mapid);
-                    // asal.addData(freeJson);
+                        var geojsonMarkerOptions = {
+                            radius: 8,
+                            fillColor: "#ff7800",
+                            color: "#000",
+                            weight: 1,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        };
 
-                    var geojsonMarkerOptions = {
-                        radius: 8,
-                        fillColor: "#ff7800",
-                        color: "#000",
-                        weight: 1,
-                        opacity: 1,
-                        fillOpacity: 0.8
-                    };
+                        var coorsLayer = L.geoJson(freeJson, {
+                            pointToLayer: function (feature, latlng) {
+                                return L.circleMarker(latlng, geojsonMarkerOptions);
+                            },
 
-                    var coorsLayer = L.geoJson(freeJson, {
-                        pointToLayer: function (feature, latlng) {
-                            return L.circleMarker(latlng, geojsonMarkerOptions);
-                        },
+                            // onEachFeature: onEachFeature
+                        }).addTo(mapid);
+                    }
+                    else{
+                        var freeJson = {
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "LineString",
+                                "coordinates": init_coor
+                            },
+                        };
 
-                        // onEachFeature: onEachFeature
-                    }).addTo(mapid);
-
+                        var coorsLayer = L.geoJson(freeJson).addTo(mapid);
+                    }
 
                 </script>
             @endforeach
