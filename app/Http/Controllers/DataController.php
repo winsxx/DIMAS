@@ -12,8 +12,13 @@ class DataController extends Controller
 {
     public function testDatabase(){
     	$result = $this->victimMovement("111-56-8948");
-        $result2 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
-    	return $result2;
+        // $result2 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
+        // var_dump($result);
+        // var_dump($result[0]);
+        // var_dump($result[0]->st_asgeojson);
+        // var_dump(json_decode($result[0]->st_asgeojson)->type);
+    	return $result;
+        // return view('query3')->with('result',$result);
     }
 
     # Query no 3
