@@ -30,11 +30,15 @@ class DataController extends Controller
         $query7 = $this->medicalFacility("village", "Sawahan");
         $query8medical = $this->numberOfVictimMedicalFacility("D001", "banjir", "village", "Sawahan", 
             "2015-07-23", "2015-07-24", "RS Kedasih", "Rumah Sakit");
-        $query8refugee = $this->numberOfVictimRefugeeCamp("D001", "banjir", "village", "Sawahan", 
-            "2015-07-23", "2015-07-24", "Posko Bencana 1", "balai desa");
+        // $query8refugee = $this->numberOfVictimRefugeeCamp("D001", "banjir", "village", "Sawahan", 
+        //     "2015-07-23", "2015-07-24", "Posko Bencana 1", "balai desa");
         $query8age = $this->numberOfVictimAgeGroup("D001", "banjir", "village", "Sawahan", 
             "2015-07-23", "2015-07-24", 20, 40);
-    	return $query8age;
+        $query8gender = $this->numberOfVictimGender("D001", "banjir", "village", "Sawahan", 
+            "2015-07-23", "2015-07-24","M");
+        $query8status = $this->numberOfVictimStatus("D001", "banjir", "village", "Sawahan", 
+            "2015-07-23", "2015-07-24", "missing");
+    	return $query8status;
     }
 
     # Query no 1
@@ -220,7 +224,7 @@ class DataController extends Controller
     }
 
     # Query 8 
-        private function numberOfVictimMedicalFacility($disaster, $disasterType, $admLevel, 
+    private function numberOfVictimMedicalFacility($disaster, $disasterType, $admLevel, 
         $locationName, $start_timestamp, $end_timestamp, $medFacilityName, $medFacilityType){
 
         $query = "SELECT COUNT(DISTINCT victim.nik) FROM victim, victim_of, victim_event, disaster_event, disaster_type, treated_at, med_facility, village WHERE victim.nik = victim_of.nik AND victim_of.id = disaster_event.event_id AND victim_event.nik = victim.nik AND disaster_type.disaster_id = disaster_event.event_id AND treated_at.nik = victim.nik AND med_facility.facility_id = treated_at.facility_id AND ST_Contains(village.geom, victim_event.geom)";
@@ -325,6 +329,7 @@ class DataController extends Controller
         return $number;
     }
 
+    # Query 8
     private function numberOfVictimAgeGroup($disaster, $disasterType, $admLevel, 
         $locationName, $start_timestamp, $end_timestamp, $minAge, $maxAge){
 
@@ -367,4 +372,90 @@ class DataController extends Controller
         return $number;
     }
 
+    # Query 8
+    private function numberOfVictimGender($disaster, $disasterType, $admLevel, 
+        $locationName, $start_timestamp, $end_timestamp, $gender){
+
+        $query = "SELECT COUNT(DISTINCT victim.nik) FROM victim, victim_of, victim_event, disaster_event, disaster_type, village WHERE victim.nik = victim_of.nik AND victim_of.id = disaster_event.event_id AND victim_event.nik = victim.nik AND disaster_type.disaster_id = disaster_event.event_id AND ST_Contains(village.geom, victim_event.geom)";
+
+        # disaster event
+        if(isset($disaster)){
+            $query = "{$query} AND disaster_event.event_id='{$disaster}'";
+        }
+
+        # disaster type
+        if(isset($disasterType)){
+            $query = "{$query} AND disaster_type.disaster_type='{$disasterType}'";
+        }
+
+        # administration level and name
+        if(isset($admLevel) && isset($locationName)){
+            if($admLevel == 'village'){
+                $query = "{$query} AND village.village_name='{$locationName}'";
+            } else if ($admLevel == 'district'){
+                $query = "{$query} AND village.district='{$locationName}'";
+            } else if ($admLevel == 'subdistrict'){
+                $query = "{$query} AND village.subdistrict='{$locationName}'";
+            } else if ($admLevel == 'province'){
+                $query = "{$query} AND village.province='{$locationName}'";
+            }
+        }
+
+        # victim event
+        if(isset($start_timestamp) && isset($end_timestamp)){
+            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+        }
+
+        # gender
+        if(isset($gender)){
+            $query = "{$query} AND victim.gender = '{$gender}'";
+        }
+
+        $number = DB::select(DB::raw($query));
+        return $number;
+    }
+
+    # Query 8
+    private function numberOfVictimStatus($disaster, $disasterType, $admLevel, 
+        $locationName, $start_timestamp, $end_timestamp, $status){
+
+        $query = "SELECT COUNT(DISTINCT victim.nik) FROM victim, victim_of, victim_event, disaster_event, disaster_type, village, victim_status WHERE victim.nik = victim_of.nik  AND victim_of.id = disaster_event.event_id  AND victim_event.nik = victim.nik AND victim_status.nik = victim.nik AND disaster_type.disaster_id = disaster_event.event_id  AND ST_Contains(village.geom, victim_event.geom)";
+
+        # disaster event
+        if(isset($disaster)){
+            $query = "{$query} AND disaster_event.event_id='{$disaster}'";
+        }
+
+        # disaster type
+        if(isset($disasterType)){
+            $query = "{$query} AND disaster_type.disaster_type='{$disasterType}'";
+        }
+
+        # administration level and name
+        if(isset($admLevel) && isset($locationName)){
+            if($admLevel == 'village'){
+                $query = "{$query} AND village.village_name='{$locationName}'";
+            } else if ($admLevel == 'district'){
+                $query = "{$query} AND village.district='{$locationName}'";
+            } else if ($admLevel == 'subdistrict'){
+                $query = "{$query} AND village.subdistrict='{$locationName}'";
+            } else if ($admLevel == 'province'){
+                $query = "{$query} AND village.province='{$locationName}'";
+            }
+        }
+
+        # victim event
+        if(isset($start_timestamp) && isset($end_timestamp)){
+            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+        }
+
+        # victim status
+        if(isset($status)){
+            $query = "{$query} AND victim_status.status = '{$status}'";
+            $query = "{$query} AND ((NOT (victim_status.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_status.start_time AND '{$end_timestamp}'::timestamp < victim_status.start_time)) OR (victim_status.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_status.end_time OR '{$end_timestamp}'::timestamp < victim_status.start_time)))";
+        }
+
+        $number = DB::select(DB::raw($query));
+        return $number;
+    }
 }
