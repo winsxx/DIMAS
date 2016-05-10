@@ -17,14 +17,9 @@ class DataController extends Controller
         // var_dump($result[0]);
         // var_dump($result[0]->st_asgeojson);
         // var_dump(json_decode($result[0]->st_asgeojson)->type);
-    	return $result;
+    	// return $result;
         // return view('query3')->with('result',$result);
-    }
 
-    # Query no 3
-    private function victimMovement($victimId){
-    	$movement = DB::select(DB::raw("SELECT ST_AsGeoJSON(ST_MakeLine(movement.geom)) FROM (SELECT victim_event.geom AS geom FROM victim, victim_event WHERE victim.nik = :victimid AND victim.nik = victim_event.nik ORDER BY victim_event.start_time) AS movement"), array('victimid' => $victimId));
-    	return $movement;
         $query1 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
         # Testing
         $query2 = $this->disasterChanges("D003", null);
@@ -33,7 +28,13 @@ class DataController extends Controller
         $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
         $query6 = $this->refugeeCamp("village", "Sawahan");
         $query7 = $this->medicalFacility("village", "Sawahan");
-    	return $query2;
+        return $query2;
+    }
+
+    # Query no 3
+    private function victimMovement($victimId){
+    	$movement = DB::select(DB::raw("SELECT ST_AsGeoJSON(ST_MakeLine(movement.geom)) FROM (SELECT victim_event.geom AS geom FROM victim, victim_event WHERE victim.nik = :victimid AND victim.nik = victim_event.nik ORDER BY victim_event.start_time) AS movement"), array('victimid' => $victimId));
+    	return $movement;
     }
 
     # Query no 1
