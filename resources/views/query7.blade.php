@@ -17,16 +17,16 @@
         <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
 
             @if (sizeof($result) == 0)
-                <p>Tidak ada daerah yang terkena bencana ini</p>
+                <p>Tidak ada fasilitas medikal di wilayah ini.</p>
             @else
                 <div id="mapid"></div>
 
-                 @foreach ($result as $key=>$res)
+                @foreach ($result as $key=>$res)
                      <script type="text/javascript">
                         L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw';
                         var key = {!!json_encode($key)!!}
                         var raw_data = {!!json_encode($res)!!};
-                        var village_id = {!!json_encode(json_decode($res->village_id))!!};
+                        var facility_name = {!!json_encode(json_decode($res->facility_name))!!};
                         var geom = {!!json_encode(json_decode($res->st_asgeojson))!!};
                         var coord = geom['coordinates'];
 

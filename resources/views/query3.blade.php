@@ -19,11 +19,13 @@
         <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
 
             <script type="text/javascript">
-                @foreach ($result as $res)
+                @foreach ($result as $key=>$res)
 
                     var raw_data = {!!json_encode($res)!!};
                     var geom = {!!json_encode(json_decode($res->st_asgeojson))!!};
                     var init_coor = geom['coordinates'];
+                    
+                    // console.log({!!json_encode($key)!!});
                     console.log(raw_data);
                     console.log(geom);
                     console.log(init_coor);

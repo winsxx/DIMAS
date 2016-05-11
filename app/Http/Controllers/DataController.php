@@ -27,7 +27,7 @@ class DataController extends Controller
         $query4 = $this->villageAffected("D001", "banjir", "2015-07-23", "2015-07-24");
         $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
         $query6 = $this->refugeeCamp("village", "Sawahan");
-        $query7 = $this->medicalFacility("village", "Sawahan");
+        $query7 = $this->medicalFacility("village", "Losari");
         $query8medical = $this->numberOfVictimMedicalFacility("D001", "banjir", "village", "Sawahan", 
             "2015-07-23", "2015-07-24", "RS Kedasih", "Rumah Sakit");
         // $query8refugee = $this->numberOfVictimRefugeeCamp("D001", "banjir", "village", "Sawahan", 
@@ -40,8 +40,8 @@ class DataController extends Controller
             "2015-07-23", "2015-07-24", "missing");
     	// return $query8status;
 
-        var_dump($query4);
-        return view('query4')->with('result',$query4);
+        // var_dump($query7);
+        return view('query7')->with('result',$query7);
     }
 
     public function query1(){
@@ -355,7 +355,7 @@ class DataController extends Controller
 
     # Query 6
     private function refugeeCamp($admLevel, $name){
-        $query = "SELECT refuge_camp.camp_name FROM village, refuge_camp WHERE refuge_camp.location = village.village_id";
+        $query = "SELECT refuge_camp.camp_name, ST_AsGeoJSON(refuge_camp.geom) FROM village, refuge_camp WHERE refuge_camp.location = village.village_id";
 
         # administration level and name
         if(isset($admLevel) && isset($name)){
@@ -376,7 +376,7 @@ class DataController extends Controller
 
     # Query 7
     private function medicalFacility($admLevel, $name){
-        $query = "SELECT med_facility.facility_name FROM village, med_facility WHERE med_facility.location = village.village_id";
+        $query = "SELECT med_facility.facility_name, ST_AsGeoJSON(med_facility.geom) FROM village, med_facility WHERE med_facility.location = village.village_id";
 
         # administration level and name
         if(isset($admLevel) && isset($name)){
