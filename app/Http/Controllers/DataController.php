@@ -40,8 +40,8 @@ class DataController extends Controller
             "2015-07-23", "2015-07-24", "missing");
     	// return $query8status;
 
-        // var_dump($query3);
-        return view('query6')->with('result',$query6);
+        // var_dump($query2);
+        return view('query2')->with('result',$query2);
     }
 
     public function query1(){
@@ -537,7 +537,7 @@ class DataController extends Controller
 
         # age
         if(isset($minAge) && isset($maxAge)){
-            $query = "{$query} AND extract(year from AGE(now(), to_timestamp(victim.dob, 'MM/DD/YYYY'))) > {$minAge} AND extract(year from AGE(now(), to_timestamp(victim.dob, 'MM/DD/YYYY'))) < {$maxAge}";
+            $query = "{$query} AND extract(year from AGE(now(), to_timestamp(victim.dob, 'MM/DD/YYYY'))) >= {$minAge} AND extract(year from AGE(now(), to_timestamp(victim.dob, 'MM/DD/YYYY'))) <= {$maxAge}";
         }
 
         $number = DB::select(DB::raw($query));
