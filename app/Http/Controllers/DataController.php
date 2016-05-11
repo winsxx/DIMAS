@@ -10,6 +10,7 @@ use DB;
 
 class DataController extends Controller
 {
+
     public function testDatabase(){
     	$result = $this->victimMovement("111-56-8948");
         // $result2 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
@@ -39,7 +40,174 @@ class DataController extends Controller
             "2015-07-23", "2015-07-24", "missing");
     	// return $query8status;
 
-        return view('query3')->with('result',$query3);
+        var_dump($query1);
+        return view('query4')->with('result',$query4);
+    }
+
+    public function query1(){
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $disasterType = Input::get('disaster_type');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+
+        $query1 = $this->disasterEvent($admLevel, $locationName, $disasterType, $startDate, $endDate);
+
+        return $query1; #return view
+    }
+
+    public function query2(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+
+        $query2 = $this->disasterChanges($disasterEvent, $disasterType);
+
+        return $query2;
+    }
+
+    public function query3(){
+        $victimNik = Input::get('victim_nik');
+
+        $query3 = $this->victimMovement($victimNik);
+
+        return $query3;
+    }
+
+    public function query4(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        
+        $query4 = $this->villageAffected($disaterEvent, $disasterType, $startDate, $endDate);
+
+        return $query4;
+    }
+
+    public function query5(){        
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+
+        $query5 = $this->victimList($disasterEvent, $disasterType, $admLevel, $locationName, $startDate, $endDate);
+
+        return $query5;
+    }
+
+    public function query6(){
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+
+        $query6 = $this->refugeeCamp($admLevel, $locationName);
+
+        return $query6;
+    }
+
+    public function query7(){
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+
+        $query7 = $this->medicalFacility($admLevel, $locationName);
+
+        return $query7;
+    }
+
+    public function query8refugee(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        $refugeeName = Input::get('refugee_name');
+        $refugeeType = Input::get('refugee_type');
+
+        $query8 = $this->numberOfVictimRefugeeCamp($disasterEvent, $disasterType, $admLevel, $locationName, 
+             $startDate, $endDate, $refugeeName, $refugeeType);
+
+        return $query8;
+    }
+
+    public function query8medical(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        $medicalName = Input::get('medical_name');
+        $medicalType = Input::get('medical_type');
+
+        $query8 = $this->numberOfVictimMedicalFacility($disasterEvent, $disasterType, $admLevel, $locationName, 
+             $startDate, $endDate, $medicalName, $medicalType);
+
+        return $query8;
+    }
+
+    public function query8gender(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        $gender = Input:: get('gender');
+
+        $query8 = $this->numberOfVictimGender($disasterEvent, $disasterType, $admLevel, $locationName, 
+             $startDate, $endDate, $gender);
+
+        return $query8;
+    }
+
+    public function query8age(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        $ageGroup = Input::get('age_group');
+
+        $query = null;
+        if($ageGroup == "baby"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 0, 0);
+        } else if ($ageGroup == "toddler"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 1, 4);
+        } else if ($ageGroup == "child"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 5, 12);
+        } else if ($ageGroup == "teenager"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 13, 17);
+        } else if ($ageGroup == "adult"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 18, 59);
+        } else if ($ageGroup == "elderly"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 60, 999);
+        }
+
+        return $query;
+    }
+
+    public function query8status(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        $status = Input::get('status');
+
+        $query8 = $this->numberOfVictimStatus($disasterEvent, $disasterType, $admLevel, $locationName, 
+             $startDate, $endDate, $status);
+
+        return $query8;
     }
 
     # Query no 3
@@ -72,7 +240,7 @@ class DataController extends Controller
 
         # time
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (disaster_coverage.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < disaster_coverage.start_time AND '{$end_timestamp}'::timestamp < disaster_coverage.start_time)) OR (disaster_coverage.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > disaster_coverage.end_time OR '{$end_timestamp}'::timestamp < disaster_coverage.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "disaster_coverage", $start_timestamp, $end_timestamp);
         }
 
         $event = DB::select(DB::raw($query));
@@ -114,7 +282,7 @@ class DataController extends Controller
             }
             $start_timestamp = $timeArray[$i-1];
             $end_timestamp = $timeArray[$i];
-            $query = "{$query} AND ((NOT (disaster_coverage.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < disaster_coverage.start_time AND '{$end_timestamp}'::timestamp < disaster_coverage.start_time)) OR (disaster_coverage.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > disaster_coverage.end_time OR '{$end_timestamp}'::timestamp < disaster_coverage.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "disaster_coverage", $start_timestamp, $end_timestamp);
             $query = "{$query} GROUP BY disaster_id";
             $region = DB::select(DB::raw($query));
             array_push($result, array("start_time" => $start_timestamp, 
@@ -140,10 +308,13 @@ class DataController extends Controller
 
         # time
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (disaster_coverage.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < disaster_coverage.start_time AND '{$end_timestamp}'::timestamp < disaster_coverage.start_time)) OR (disaster_coverage.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > disaster_coverage.end_time OR '{$end_timestamp}'::timestamp < disaster_coverage.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "disaster_coverage", $start_timestamp, $end_timestamp);
         }
 
+        // var_dump($query);
+
         $villageList = DB::select(DB::raw($query));
+        // var_dump($villageList);
         return $villageList;
     }
 
@@ -175,7 +346,7 @@ class DataController extends Controller
         }
 
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         $victimList = DB::select(DB::raw($query));
@@ -265,12 +436,12 @@ class DataController extends Controller
 
         # victim event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         # medical event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (treated_at.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < treated_at.start_time AND '{$end_timestamp}'::timestamp < treated_at.start_time)) OR (treated_at.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > treated_at.end_time OR '{$end_timestamp}'::timestamp < treated_at.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "treated_at", $start_timestamp, $end_timestamp);
         }
 
         $number = DB::select(DB::raw($query));
@@ -318,12 +489,12 @@ class DataController extends Controller
 
         # victim event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+           $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         # refugee event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (refugee_at.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < refugee_at.start_time AND '{$end_timestamp}'::timestamp < refugee_at.start_time)) OR (refugee_at.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > refugee_at.end_time OR '{$end_timestamp}'::timestamp < refugee_at.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "refugee_at", $start_timestamp, $end_timestamp);
         }
 
         $number = DB::select(DB::raw($query));
@@ -361,7 +532,7 @@ class DataController extends Controller
 
         # victim event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         # age
@@ -404,7 +575,7 @@ class DataController extends Controller
 
         # victim event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         # gender
@@ -447,16 +618,22 @@ class DataController extends Controller
 
         # victim event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+           $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         # victim status
         if(isset($status)){
             $query = "{$query} AND victim_status.status = '{$status}'";
-            $query = "{$query} AND ((NOT (victim_status.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_status.start_time AND '{$end_timestamp}'::timestamp < victim_status.start_time)) OR (victim_status.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_status.end_time OR '{$end_timestamp}'::timestamp < victim_status.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "victim_status", $start_timestamp, $end_timestamp);
         }
 
         $number = DB::select(DB::raw($query));
         return $number;
     }
+
+    private function addCheckTimeIntersectionQuery($prevQuery, $tableName, $start_timestamp, $end_timestamp){
+        $newQuery = "{$prevQuery} AND (({$tableName}.end_time = '1970-01-01'::timestamp AND NOT('{$end_timestamp}'::timestamp <= {$tableName}.start_time)) OR ({$tableName}.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp >= {$tableName}.end_time OR '{$end_timestamp}'::timestamp <= {$tableName}.start_time)))";
+        return $newQuery;
+    }
+
 }
