@@ -56,6 +56,160 @@ class DataController extends Controller
         return $query1; #return view
     }
 
+    public function query2(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+
+        $query2 = $this->disasterChanges($disasterEvent, $disasterType);
+
+        return $query2;
+    }
+
+    public function query3(){
+        $victimNik = Input::get('victim_nik');
+
+        $query3 = $this->victimMovement($victimNik);
+
+        return $query3;
+    }
+
+    public function query4(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        
+        $query4 = $this->villageAffected($disaterEvent, $disasterType, $startDate, $endDate);
+
+        return $query4;
+    }
+
+    public function query5(){        
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+
+        $query5 = $this->victimList($disasterEvent, $disasterType, $admLevel, $locationName, $startDate, $endDate);
+
+        return $query5;
+    }
+
+    public function query6(){
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+
+        $query6 = $this->refugeeCamp($admLevel, $locationName);
+
+        return $query6;
+    }
+
+    public function query7(){
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+
+        $query7 = $this->medicalFacility($admLevel, $locationName);
+
+        return $query7;
+    }
+
+    public function query8refugee(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        $refugeeName = Input::get('refugee_name');
+        $refugeeType = Input::get('refugee_type');
+
+        $query8 = $this->numberOfVictimRefugeeCamp($disasterEvent, $disasterType, $admLevel, $locationName, 
+             $startDate, $endDate, $refugeeName, $refugeeType);
+
+        return $query8;
+    }
+
+    public function query8medical(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        $medicalName = Input::get('medical_name');
+        $medicalType = Input::get('medical_type');
+
+        $query8 = $this->numberOfVictimMedicalFacility($disasterEvent, $disasterType, $admLevel, $locationName, 
+             $startDate, $endDate, $medicalName, $medicalType);
+
+        return $query8;
+    }
+
+    public function query8gender(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        $gender = Input:: get('gender');
+
+        $query8 = $this->numberOfVictimGender($disasterEvent, $disasterType, $admLevel, $locationName, 
+             $startDate, $endDate, $gender);
+
+        return $query8;
+    }
+
+    public function query8age(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        $ageGroup = Input::get('age_group');
+
+        $query = null;
+        if($ageGroup == "baby"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 0, 0);
+        } else if ($ageGroup == "toddler"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 1, 4);
+        } else if ($ageGroup == "child"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 5, 12);
+        } else if ($ageGroup == "teenager"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 13, 17);
+        } else if ($ageGroup == "adult"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 18, 59);
+        } else if ($ageGroup == "elderly"){
+            $query = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                    $startDate, $endDate, 60, 999);
+        }
+
+        return $query;
+    }
+
+    public function query8status(){
+        $disasterEvent = Input::get('disaster_event');
+        $disasterType = Input::get('disaster_type');
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+        $status = Input::get('status');
+
+        $query8 = $this->numberOfVictimStatus($disasterEvent, $disasterType, $admLevel, $locationName, 
+             $startDate, $endDate, $status);
+
+        return $query8;
+    }
+
     # Query no 3
     private function victimMovement($victimId){
         $movement = DB::select(DB::raw("SELECT ST_AsGeoJSON(ST_MakeLine(movement.geom)) FROM (SELECT victim_event.geom AS geom FROM victim, victim_event WHERE victim.nik = :victimid AND victim.nik = victim_event.nik ORDER BY victim_event.start_time) AS movement"), array('victimid' => $victimId));
