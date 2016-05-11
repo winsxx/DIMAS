@@ -537,7 +537,7 @@ class DataController extends Controller
 
         # age
         if(isset($minAge) && isset($maxAge)){
-            $query = "{$query} AND extract(year from AGE(now(), to_timestamp(victim.dob, 'MM/DD/YYYY'))) > {$minAge} AND extract(year from AGE(now(), to_timestamp(victim.dob, 'MM/DD/YYYY'))) < {$maxAge}";
+            $query = "{$query} AND ((victim_event.end_time = '1970-01-01'::timestamp AND extract(year from AGE(now(), to_timestamp(victim.dob, 'MM/DD/YYYY'))) >= '{$minAge}') OR (victim_event.end_time != '1970-01-01'::timestamp AND extract(year from AGE(victim_event.end_time, to_timestamp(victim.dob, 'MM/DD/YYYY'))) >= '{$minAge}')) AND extract(year from AGE(victim_event.start_time, to_timestamp(victim.dob, 'MM/DD/YYYY'))) <= '{$maxAge}'";
         }
 
         $number = DB::select(DB::raw($query));
