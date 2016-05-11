@@ -24,7 +24,7 @@
                     var raw_data = {!!json_encode($res)!!};
                     var geom = {!!json_encode(json_decode($res->st_asgeojson))!!};
                     var init_coor = geom['coordinates'];
-                    
+
                     // console.log({!!json_encode($key)!!});
                     console.log(raw_data);
                     console.log(geom);
@@ -34,6 +34,12 @@
                     L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw';
                     var mapid = L.mapbox.map('mapid', 'mapbox.streets').setView([init_coor[0][1], init_coor[0][0]] , 7);
 
+                    function onEachFeature(feature, layer) {
+                         if (feature.properties && feature.properties.popupContent) {
+                            layer.bindPopup(feature.properties.popupContent);
+                        }
+                    }
+
                     if (init_coor.length == 1){
                         var freeJson = {
                             "type": "Feature",
@@ -41,6 +47,9 @@
                                 "type": "Point",
                                 "coordinates": init_coor[0]
                             },
+                            // "properties": {
+                            //     "popupContent": "posisi korban bernama " + victim_name;
+                            // }
                         };
 
                         // var freeJson2 = {
@@ -86,6 +95,9 @@
                                 "type": "LineString",
                                 "coordinates": init_coor
                             },
+                            // "properties": {
+                            //     "popupContent": "rute evakuasi korban bernama " + victim_name;
+                            // }
                         };
 
                         var coorsLayer = L.geoJson(freeJson).addTo(mapid);

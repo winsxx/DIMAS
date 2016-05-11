@@ -26,8 +26,8 @@ class DataController extends Controller
         $query3 = $this->victimMovement("111-56-8948");
         $query4 = $this->villageAffected("D001", "banjir", "2015-07-23", "2015-07-24");
         $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
-        $query6 = $this->refugeeCamp("village", "Sawahan");
-        $query7 = $this->medicalFacility("village", "Losari");
+        $query6 = $this->refugeeCamp("province", "Jawa Timur");
+        $query7 = $this->medicalFacility("province", "Jawa Timur");
         $query8medical = $this->numberOfVictimMedicalFacility("D001", "banjir", "village", "Sawahan", 
             "2015-07-23", "2015-07-24", "RS Kedasih", "Rumah Sakit");
         // $query8refugee = $this->numberOfVictimRefugeeCamp("D001", "banjir", "village", "Sawahan", 
@@ -40,8 +40,8 @@ class DataController extends Controller
             "2015-07-23", "2015-07-24", "missing");
     	// return $query8status;
 
-        // var_dump($query7);
-        return view('query7')->with('result',$query7);
+        // var_dump($query3);
+        return view('query6')->with('result',$query6);
     }
 
     public function query1(){

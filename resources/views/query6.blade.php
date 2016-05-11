@@ -26,7 +26,7 @@
                         L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw';
                         var key = {!!json_encode($key)!!}
                         var raw_data = {!!json_encode($res)!!};
-                        var camp_name = {!!json_encode(json_decode($res->camp_name))!!};
+                        var camp_name = {!!json_encode($res->camp_name)!!};
                         var geom = {!!json_encode(json_decode($res->st_asgeojson))!!};
                         var coord = geom['coordinates'];
 
@@ -37,16 +37,25 @@
 
                         var component_prop = {
                             "type": "Feature",
-                            "geometry": geom
+                            "geometry": geom,
+                            "properties": {
+                                "popupContent": camp_name
+                            }
                         };
 
                         var mapid;
 
-                        if (key == 0){
-                            mapid = L.mapbox.map('mapid', 'mapbox.streets').setView([coord[1], coord[0]], 30);
+                        function onEachFeature(feature, layer) {
+                             if (feature.properties && feature.properties.popupContent) {
+                                layer.bindPopup(feature.properties.popupContent);
+                            }
                         }
 
-                        L.geoJson(component_prop).addTo(mapid);
+                        if (key == 0){
+                            mapid = L.mapbox.map('mapid', 'mapbox.streets').setView([coord[1], coord[0]], 2);
+                        }
+
+                        L.geoJson(component_prop, {onEachFeature: onEachFeature }).addTo(mapid);
 
                     </script>
                 @endforeach
