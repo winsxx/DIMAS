@@ -40,7 +40,7 @@ class DataController extends Controller
             "2015-07-23", "2015-07-24", "missing");
     	// return $query8status;
 
-        var_dump($query4);
+        var_dump($query1);
         return view('query4')->with('result',$query4);
     }
 
@@ -240,7 +240,7 @@ class DataController extends Controller
 
         # time
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (disaster_coverage.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < disaster_coverage.start_time AND '{$end_timestamp}'::timestamp < disaster_coverage.start_time)) OR (disaster_coverage.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > disaster_coverage.end_time OR '{$end_timestamp}'::timestamp < disaster_coverage.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "disaster_coverage", $start_timestamp, $end_timestamp);
         }
 
         $event = DB::select(DB::raw($query));
@@ -282,7 +282,7 @@ class DataController extends Controller
             }
             $start_timestamp = $timeArray[$i-1];
             $end_timestamp = $timeArray[$i];
-            $query = "{$query} AND ((NOT (disaster_coverage.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < disaster_coverage.start_time AND '{$end_timestamp}'::timestamp < disaster_coverage.start_time)) OR (disaster_coverage.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > disaster_coverage.end_time OR '{$end_timestamp}'::timestamp < disaster_coverage.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "disaster_coverage", $start_timestamp, $end_timestamp);
             $query = "{$query} GROUP BY disaster_id";
             $region = DB::select(DB::raw($query));
             array_push($result, array("start_time" => $start_timestamp, 
@@ -308,7 +308,7 @@ class DataController extends Controller
 
         # time
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (disaster_coverage.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < disaster_coverage.start_time AND '{$end_timestamp}'::timestamp < disaster_coverage.start_time)) OR (disaster_coverage.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > disaster_coverage.end_time OR '{$end_timestamp}'::timestamp < disaster_coverage.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "disaster_coverage", $start_timestamp, $end_timestamp);
         }
 
         // var_dump($query);
@@ -346,7 +346,7 @@ class DataController extends Controller
         }
 
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         $victimList = DB::select(DB::raw($query));
@@ -436,12 +436,12 @@ class DataController extends Controller
 
         # victim event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         # medical event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (treated_at.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < treated_at.start_time AND '{$end_timestamp}'::timestamp < treated_at.start_time)) OR (treated_at.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > treated_at.end_time OR '{$end_timestamp}'::timestamp < treated_at.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "treated_at", $start_timestamp, $end_timestamp);
         }
 
         $number = DB::select(DB::raw($query));
@@ -489,12 +489,12 @@ class DataController extends Controller
 
         # victim event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+           $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         # refugee event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (refugee_at.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < refugee_at.start_time AND '{$end_timestamp}'::timestamp < refugee_at.start_time)) OR (refugee_at.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > refugee_at.end_time OR '{$end_timestamp}'::timestamp < refugee_at.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "refugee_at", $start_timestamp, $end_timestamp);
         }
 
         $number = DB::select(DB::raw($query));
@@ -532,7 +532,7 @@ class DataController extends Controller
 
         # victim event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         # age
@@ -575,7 +575,7 @@ class DataController extends Controller
 
         # victim event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         # gender
@@ -618,16 +618,22 @@ class DataController extends Controller
 
         # victim event
         if(isset($start_timestamp) && isset($end_timestamp)){
-            $query = "{$query} AND ((NOT (victim_event.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_event.start_time AND '{$end_timestamp}'::timestamp < victim_event.start_time)) OR (victim_event.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_event.end_time OR '{$end_timestamp}'::timestamp < victim_event.start_time)))";
+           $query = $this->addCheckTimeIntersectionQuery($query, "victim_event", $start_timestamp, $end_timestamp);
         }
 
         # victim status
         if(isset($status)){
             $query = "{$query} AND victim_status.status = '{$status}'";
-            $query = "{$query} AND ((NOT (victim_status.end_time = '1970-01-01'::timestamp AND '{$start_timestamp}'::timestamp < victim_status.start_time AND '{$end_timestamp}'::timestamp < victim_status.start_time)) OR (victim_status.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp > victim_status.end_time OR '{$end_timestamp}'::timestamp < victim_status.start_time)))";
+            $query = $this->addCheckTimeIntersectionQuery($query, "victim_status", $start_timestamp, $end_timestamp);
         }
 
         $number = DB::select(DB::raw($query));
         return $number;
     }
+
+    private function addCheckTimeIntersectionQuery($prevQuery, $tableName, $start_timestamp, $end_timestamp){
+        $newQuery = "{$prevQuery} AND (({$tableName}.end_time = '1970-01-01'::timestamp AND NOT('{$end_timestamp}'::timestamp <= {$tableName}.start_time)) OR ({$tableName}.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp >= {$tableName}.end_time OR '{$end_timestamp}'::timestamp <= {$tableName}.start_time)))";
+        return $newQuery;
+    }
+
 }
