@@ -10,6 +10,7 @@ use DB;
 
 class DataController extends Controller
 {
+
     public function testDatabase(){
     	$result = $this->victimMovement("111-56-8948");
         // $result2 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
@@ -41,6 +42,18 @@ class DataController extends Controller
 
         var_dump($query4);
         return view('query4')->with('result',$query4);
+    }
+
+    public function query1(){
+        $admLevel = Input::get('adm_level');
+        $locationName = Input::get('location_name');
+        $disasterType = Input::get('disaster_type');
+        $startDate = Input::get('start_date');
+        $endDate = Input::get('end_date');
+
+        $query1 = $this->disasterEvent($admLevel, $locationName, $disasterType, $startDate, $endDate);
+
+        return $query1; #return view
     }
 
     # Query no 3
