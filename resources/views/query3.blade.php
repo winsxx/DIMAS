@@ -18,8 +18,8 @@
         <script src="{{ URL::asset('leaflet/leaflet-src.js')}}"></script>
         <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
 
-            @foreach ($result as $res)
-                <script type="text/javascript">
+            <script type="text/javascript">
+                @foreach ($result as $res)
 
                     var raw_data = {!!json_encode($res)!!};
                     var geom = {!!json_encode(json_decode($res->st_asgeojson))!!};
@@ -89,7 +89,7 @@
                         var coorsLayer = L.geoJson(freeJson).addTo(mapid);
                     }
 
-                </script>
-            @endforeach
+                @endforeach
+            </script>
     </body>
 </html>

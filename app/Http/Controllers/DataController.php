@@ -23,7 +23,7 @@ class DataController extends Controller
         # Testing
         $query2 = $this->disasterChanges("D003", null);
         $query3 = $this->victimMovement("111-56-8948");
-        $query4 = $this->villageAffected("D003", "banjir", "2015-07-23", "2015-07-24");
+        $query4 = $this->villageAffected("D001", "banjir", "2015-07-23", "2015-07-24");
         $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
         $query6 = $this->refugeeCamp("village", "Sawahan");
         $query7 = $this->medicalFacility("village", "Sawahan");

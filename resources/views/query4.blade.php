@@ -20,16 +20,35 @@
                 <p>Tidak ada daerah yang terkena bencana ini</p>
             @else
                 <div id="mapid"></div>
-                @foreach ($result as $res)
-                    <script type="text/javascript">
+                <script type="text/javascript">
+                    L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw';
+
+                    @for ($i = 0; $i < sizeof($result); $i++)
+
+                        $res = $result[$i];
+
                         var raw_data = {!!json_encode($res)!!};
-                        // console.log($res);
-                        console.log(raw_data);
+                        var geom = {!!json_encode(json_decode($res->st_asgeojson))!!};
+                        var coord = geom['coordinates'];
 
-                        L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw';
+                        var component_prop = {
+                            "type": "Feature",
+                            "geometry": geom
+                        };
 
-                    </script>
-                @endforeach
+                        @if ($i == 0)
+                            var mapid = L.mapbox.map('mapid', 'mapbox.streets').setView([coord[0][1], coord[0][0]], 7);
+                            var myLayer = L.geoJson().addTo(mapid);
+                        @endif
+
+                        myLayer.addData(component_prop);
+
+                        // console.log(raw_data);
+                        // console.log(geom);
+                        // console.log(coord);
+
+                    @endfor
+                </script>
             @endif
     </body>
 </html>
