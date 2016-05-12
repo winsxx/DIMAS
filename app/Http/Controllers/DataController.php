@@ -19,28 +19,28 @@ class DataController extends Controller
         // var_dump(json_decode($result[0]->st_asgeojson)->type);
     	// return $result;
 
-        $query1 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
+        // $query1 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
         # Testing
-        $query2 = $this->disasterChanges("D003", null);
+        // $query2 = $this->disasterChanges("D003", null);
         // $query3 = $this->victimMovement("111-56-8948");
-        $query4 = $this->villageAffected("D001", "banjir", "2015-07-23", "2015-07-24");
-        $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
+        $query4 = $this->villageAffected("D003", "banjir", "2015-07-23", "2015-07-24");
+        // $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
         // $query6 = $this->refugeeCamp("province", "Jawa Timur");
         // $query7 = $this->medicalFacility("province", "Jawa Timur");
-        $query8medical = $this->numberOfVictimMedicalFacility("D001", "banjir", "village", "Sawahan", 
-            "2015-07-23", "2015-07-24", "RS Kedasih", "Rumah Sakit");
+        // $query8medical = $this->numberOfVictimMedicalFacility("D001", "banjir", "village", "Sawahan", 
+            // "2015-07-23", "2015-07-24", "RS Kedasih", "Rumah Sakit");
         // $query8refugee = $this->numberOfVictimRefugeeCamp("D001", "banjir", "village", "Sawahan", 
         //     "2015-07-23", "2015-07-24", "Posko Bencana 1", "balai desa");
-        $query8age = $this->numberOfVictimAgeGroup("D001", "banjir", "village", "Sawahan", 
-            "2015-07-23", "2015-07-24", 20, 40);
-        $query8gender = $this->numberOfVictimGender("D001", "banjir", "village", "Sawahan", 
-            "2015-07-23", "2015-07-24","M");
-        $query8status = $this->numberOfVictimStatus("D001", "banjir", "village", "Sawahan", 
-            "2015-07-23", "2015-07-24", "missing");
+        // $query8age = $this->numberOfVictimAgeGroup("D001", "banjir", "village", "Sawahan", 
+            // "2015-07-23", "2015-07-24", 20, 40);
+        // $query8gender = $this->numberOfVictimGender("D001", "banjir", "village", "Sawahan", 
+            // "2015-07-23", "2015-07-24","M");
+        // $query8status = $this->numberOfVictimStatus("D001", "banjir", "village", "Sawahan", 
+            // "2015-07-23", "2015-07-24", "missing");
     	// return $query8status;
 
-        // var_dump($query2);
-        return view('hasilquery2')->with('result',$query2);
+        // var_dump($query4);
+        return view('hasilquery4')->with('result',$query4);
     }
 
     public function query1(){
@@ -55,13 +55,24 @@ class DataController extends Controller
         return $query1; #return view
     }
 
-    public function query2(){
-        $disasterEvent = Input::get('disaster_event');
-        $disasterType = Input::get('disaster_type');
+    public function query2(Request $request){
+        $input = $request->all();
+        $disasterEvent = $input['disaster_event'];
+
+        if ($input['disaster_type'] != ""){
+            $disasterType = $input['disaster_type'];
+        }
+        else{
+            $disasterType = null;
+        }
 
         $query2 = $this->disasterChanges($disasterEvent, $disasterType);
 
-        return $query2;
+        // var_dump($input['disaster_type']);
+        // var_dump($disasterType);
+        // var_dump($query2);
+
+        return view('hasilquery2')->with('result',$query2);
     }
 
     public function query3(Request $request){
@@ -297,7 +308,7 @@ class DataController extends Controller
 
     # Query no 4
     private function villageAffected($disaster, $disasterType, $start_timestamp, $end_timestamp){
-        $query = "SELECT DISTINCT village.village_id FROM disaster_coverage, village WHERE ST_Intersects(disaster_coverage.geom, village.geom)";
+        $query = "SELECT DISTINCT village.village_id, ST_AsGeoJson(village.geom) FROM disaster_coverage, village WHERE ST_Intersects(disaster_coverage.geom, village.geom)";
 
         # disaster event
         if(isset($disaster)){

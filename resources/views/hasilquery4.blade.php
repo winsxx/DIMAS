@@ -43,7 +43,7 @@
                         var mapid;
 
                         if (key == 0){
-                            mapid = L.mapbox.map('mapid', 'mapbox.streets').setView([coord[1], coord[0]], 30);
+                            mapid = L.mapbox.map('mapid', 'mapbox.streets').setView([coord[0][0][1], coord[0][0][0]], 12);
                         }
 
                         L.geoJson(component_prop).addTo(mapid);
