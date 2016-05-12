@@ -19,40 +19,42 @@ class DataController extends Controller
         // var_dump(json_decode($result[0]->st_asgeojson)->type);
     	// return $result;
 
-        // $query1 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
+        $query1 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
         # Testing
         // $query2 = $this->disasterChanges("D003", null);
         // $query3 = $this->victimMovement("111-56-8948");
         $query4 = $this->villageAffected("D003", "banjir", "2015-07-23", "2015-07-24");
-        // $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
+        $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
         // $query6 = $this->refugeeCamp("province", "Jawa Timur");
         // $query7 = $this->medicalFacility("province", "Jawa Timur");
-        // $query8medical = $this->numberOfVictimMedicalFacility("D001", "banjir", "village", "Sawahan", 
-            // "2015-07-23", "2015-07-24", "RS Kedasih", "Rumah Sakit");
-        // $query8refugee = $this->numberOfVictimRefugeeCamp("D001", "banjir", "village", "Sawahan", 
-        //     "2015-07-23", "2015-07-24", "Posko Bencana 1", "balai desa");
-        // $query8age = $this->numberOfVictimAgeGroup("D001", "banjir", "village", "Sawahan", 
-            // "2015-07-23", "2015-07-24", 20, 40);
-        // $query8gender = $this->numberOfVictimGender("D001", "banjir", "village", "Sawahan", 
-            // "2015-07-23", "2015-07-24","M");
-        // $query8status = $this->numberOfVictimStatus("D001", "banjir", "village", "Sawahan", 
-            // "2015-07-23", "2015-07-24", "missing");
+        $query8medical = $this->numberOfVictimMedicalFacility("D001", "banjir", "village", "Sawahan", 
+            "2015-07-23", "2015-07-24", "RS Kedasih", "Rumah Sakit");
+        $query8refugee = $this->numberOfVictimRefugeeCamp("D001", "banjir", "village", "Sawahan", 
+            "2015-07-23", "2015-07-24", "Posko Bencana 1", "balai desa");
+        $query8age = $this->numberOfVictimAgeGroup("D001", "banjir", "village", "Sawahan", 
+            "2015-07-23", "2015-07-24", 20, 40);
+        $query8gender = $this->numberOfVictimGender("D001", "banjir", "village", "Sawahan", 
+            "2015-07-23", "2015-07-24","M");
+        $query8status = $this->numberOfVictimStatus("D001", "banjir", "village", "Sawahan", 
+            "2015-07-23", "2015-07-24", "missing");
     	// return $query8status;
 
         // var_dump($query4);
-        return view('hasilquery4')->with('result',$query4);
+        // return view('hasilquery4')->with('result',$query4);
+        // return $query5;
     }
 
-    public function query1(){
-        $admLevel = Input::get('adm_level');
-        $locationName = Input::get('location_name');
-        $disasterType = Input::get('disaster_type');
-        $startDate = Input::get('start_date');
-        $endDate = Input::get('end_date');
+    public function query1(Request $request){
+        $input = $request->all();
+        $admLevel = $input['adm_level'];
+        $locationName = $input['location_name'];
+        $disasterType = $input['disaster_type'];
+        $startDate = $input['start_date'];
+        $endDate = $input['end_date'];
 
         $query1 = $this->disasterEvent($admLevel, $locationName, $disasterType, $startDate, $endDate);
 
-        return $query1; #return view
+        return $query1;
     }
 
     public function query2(Request $request){
@@ -85,24 +87,26 @@ class DataController extends Controller
         return view('hasilquery3')->with('result',$query3);
     }
 
-    public function query4(){
-        $disasterEvent = Input::get('disaster_event');
-        $disasterType = Input::get('disaster_type');
-        $startDate = Input::get('start_date');
-        $endDate = Input::get('end_date');
+    public function query4(Request $request){
+        $input = $request->all();
+        $disasterEvent = $input['disaster_event'];
+        $disasterType = $input['disaster_type'];
+        $startDate = $input['start_date'];
+        $endDate = $input['end_date'];
         
-        $query4 = $this->villageAffected($disaterEvent, $disasterType, $startDate, $endDate);
+        $query4 = $this->villageAffected($disasterEvent, $disasterType, $startDate, $endDate);
 
-        return $query4;
+        return view('hasilquery4')->with('result',$query4);
     }
 
-    public function query5(){        
-        $disasterEvent = Input::get('disaster_event');
-        $disasterType = Input::get('disaster_type');
-        $admLevel = Input::get('adm_level');
-        $locationName = Input::get('location_name');
-        $startDate = Input::get('start_date');
-        $endDate = Input::get('end_date');
+    public function query5(Request $request){
+        $input = $request->all();
+        $disasterEvent = $input['disaster_event'];
+        $disasterType = $input['disaster_type'];
+        $admLevel = $input['adm_level'];
+        $locationName = $input['location_name'];
+        $startDate = $input['start_date'];
+        $endDate = $input['end_date'];
 
         $query5 = $this->victimList($disasterEvent, $disasterType, $admLevel, $locationName, $startDate, $endDate);
 
