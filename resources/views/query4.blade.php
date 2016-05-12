@@ -34,16 +34,16 @@
                 <input class="form-control" name="disaster_type" id="disaster_type">
             </div>
 
-            <label for="start_time" class="col-sm-3 control-label">Start Time</label>
+            <label for="start_date" class="col-sm-3 control-label">Start Date</label>
 
             <div class="col-sm-6">
-                <input class="form-control" name="start_time" id="start_time">
+                <input class="form-control" name="start_date" id="start_date">
             </div>
 
-            <label for="end_time" class="col-sm-3 control-label">End Time</label>
+            <label for="end_date" class="col-sm-3 control-label">End Date</label>
 
             <div class="col-sm-6">
-                <input class="form-control" name="end_time" id="end_time">
+                <input class="form-control" name="end_date" id="end_date">
             </div>
 
         </div>
