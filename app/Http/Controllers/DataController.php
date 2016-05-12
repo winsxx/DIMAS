@@ -133,6 +133,10 @@ class DataController extends Controller
         return view('hasilquery7')->with('result',$query7);
     }
 
+    public function query8(Request $request){
+        $input = $request->all();
+    }
+
     public function query8refugee(){
         $disasterEvent = Input::get('disaster_event');
         $disasterType = Input::get('disaster_type');
