@@ -16,7 +16,14 @@ Route::get('/', function () {
 });
 
 Route::get('land', ['uses' => 'DataController@testDatabase']);
+Route::get('query1','DataController@userquery1');
+Route::get('query2','DataController@userquery2');
 Route::get('query3','DataController@userquery3');
+Route::get('query4','DataController@userquery4');
+Route::get('query5','DataController@userquery5');
+Route::get('query6','DataController@userquery6');
+Route::get('query7','DataController@userquery7');
+Route::get('query8','DataController@userquery8');
 Route::post('query1','DataController@query1');
 Route::post('query2','DataController@query2');
 Route::post('query3','DataController@query3');

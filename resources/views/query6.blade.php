@@ -14,20 +14,28 @@
         <div class="container">
         </div>
     </nav>
-    <form class="form-horizontal" action="/query3" method="POST" enctype="multipart/form-data">
+    <form class="form-horizontal" action="/query6" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
         <div class="col-sm-offset-2 col-sm-8">
-            <h1 class="text-center add-margin-top-bottom">Data Query 3</h1>
+            <h1 class="text-center add-margin-top-bottom">Data Query 6</h1>
         </div>
+
         <div class="form-group">
-            <label for="NIK Korban" class="col-sm-3 control-label">NIK Korban</label>
+            <label for="adm_level" class="col-sm-3 control-label">ADM Level</label>
 
             <div class="col-sm-6">
-                <input class="form-control" name="victim_nik" id="victim_nik">
+                <input class="form-control" name="adm_level" id="adm_level">
+            </div>
+
+            <label for="location_name" class="col-sm-3 control-label">Location Name</label>
+
+            <div class="col-sm-6">
+                <input class="form-control" name="location_name" id="location_name">
             </div>
 
         </div>
+
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-8 add-margin-top-bottom">
                 <button type="submit" class="btn btn-default center-block">Selesai</button>

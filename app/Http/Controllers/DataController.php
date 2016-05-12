@@ -25,8 +25,8 @@ class DataController extends Controller
         // $query3 = $this->victimMovement("111-56-8948");
         $query4 = $this->villageAffected("D001", "banjir", "2015-07-23", "2015-07-24");
         $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
-        $query6 = $this->refugeeCamp("province", "Jawa Timur");
-        $query7 = $this->medicalFacility("province", "Jawa Timur");
+        // $query6 = $this->refugeeCamp("province", "Jawa Timur");
+        // $query7 = $this->medicalFacility("province", "Jawa Timur");
         $query8medical = $this->numberOfVictimMedicalFacility("D001", "banjir", "village", "Sawahan", 
             "2015-07-23", "2015-07-24", "RS Kedasih", "Rumah Sakit");
         // $query8refugee = $this->numberOfVictimRefugeeCamp("D001", "banjir", "village", "Sawahan", 
@@ -98,22 +98,24 @@ class DataController extends Controller
         return $query5;
     }
 
-    public function query6(){
-        $admLevel = Input::get('adm_level');
-        $locationName = Input::get('location_name');
+    public function query6(Request $request){
+        $input = $request->all();
+        $admLevel = $input['adm_level'];
+        $locationName = $input['location_name'];
 
         $query6 = $this->refugeeCamp($admLevel, $locationName);
 
-        return $query6;
+        return view('hasilquery6')->with('result',$query6);
     }
 
-    public function query7(){
-        $admLevel = Input::get('adm_level');
-        $locationName = Input::get('location_name');
+    public function query7(Request $request){
+        $input = $request->all();
+        $admLevel = $input['adm_level'];
+        $locationName = $input['location_name'];
 
         $query7 = $this->medicalFacility($admLevel, $locationName);
 
-        return $query7;
+        return view('hasilquery7')->with('result',$query7);
     }
 
     public function query8refugee(){
@@ -637,9 +639,36 @@ class DataController extends Controller
         return $newQuery;
     }
 
-    public function userquery3(){
+    public function userquery1(){
+        return view('query1');
+    }
 
+    public function userquery2(){
+        return view('query2');
+    }
+
+    public function userquery3(){
         return view('query3');
+    }
+
+    public function userquery4(){
+        return view('query4');
+    }
+
+    public function userquery5(){
+        return view('query5');
+    }
+
+    public function userquery6(){
+        return view('query6');
+    }
+
+    public function userquery7(){
+        return view('query7');
+    }
+
+    public function userquery8(){
+        return view('query8');
     }
 
 }
