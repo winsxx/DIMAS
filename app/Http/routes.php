@@ -31,6 +31,7 @@ Route::post('query4','DataController@query4');
 Route::post('query5','DataController@query5');
 Route::post('query6','DataController@query6');
 Route::post('query7','DataController@query7');
+Route::post('query8','DataController@query8');
 Route::post('query8medical','DataController@query8medical');
 Route::post('query8refugee','DataController@query8refugee');
 Route::post('query8age','DataController@query8age');

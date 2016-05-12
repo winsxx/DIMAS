@@ -90,18 +90,30 @@
             </div>
 
         <div class="form-group" id="refugee_camp_part" style='display:none'>
-            <label for="refugee_camp" class="col-sm-3 control-label">Refugee Camp</label>
+            <label for="refugee_name" class="col-sm-3 control-label">Refugee Name</label>
 
             <div class="col-sm-6">
-                <input class="form-control" name="refugee_camp" id="refugee_camp">
+                <input class="form-control" name="refugee_name" id="refugee_name">
+            </div>
+
+            <label for="refugee_type" class="col-sm-3 control-label">Refugee Type</label>
+
+            <div class="col-sm-6">
+                <input class="form-control" name="refugee_type" id="refugee_type">
             </div>
         </div>
 
         <div class="form-group" id="medical_facility_part" style='display:none'>
-            <label for="medical_facility" class="col-sm-3 control-label">Medical Facility</label>
+           <label for="medical_name" class="col-sm-3 control-label">Medical Name</label>
 
             <div class="col-sm-6">
-                <input class="form-control" name="medical_facility" id="medical_facility">
+                <input class="form-control" name="medical_name" id="medical_name">
+            </div>
+
+            <label for="medical_type" class="col-sm-3 control-label">Medical Type</label>
+
+            <div class="col-sm-6">
+                <input class="form-control" name="medical_type" id="medical_type">
             </div>
         </div>
 

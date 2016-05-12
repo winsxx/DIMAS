@@ -135,6 +135,61 @@ class DataController extends Controller
 
     public function query8(Request $request){
         $input = $request->all();
+        $disasterEvent = $input['disaster_event'];
+        $disasterType = $input['disaster_type'];
+        $admLevel = $input['adm_level'];
+        $locationName = $input['location_name'];
+        $startDate = $input['start_date'];
+        $endDate = $input['end_date'];
+
+        if ($input['additional_param'] == 0){
+            $refugeeName = $input['refugee_name'];
+            $refugeeType = $input['refugee_type'];
+            $query8 = $this->numberOfVictimRefugeeCamp($disasterEvent, $disasterType, $admLevel, $locationName, 
+                $startDate, $endDate, $refugeeName, $refugeeType);
+        }
+        else if ($input['additional_param'] == 1){
+            $medicalName = $input['medical_name'];
+            $medicalType = $input['medical_type'];
+            $query8 = $this->numberOfVictimMedicalFacility($disasterEvent, $disasterType, $admLevel, $locationName, 
+                $startDate, $endDate, $medicalName, $medicalType);
+        }
+        else if ($input['additional_param'] == 2){
+            $gender = $input['gender'];
+            $query8 = $this->numberOfVictimGender($disasterEvent, $disasterType, $admLevel, $locationName, 
+                $startDate, $endDate, $gender);
+        }
+        else if ($input['additional_param'] == 3){
+            $ageGroup = $input['age'];
+            $query8 = null;
+            if($ageGroup == "baby"){
+                $query8 = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                        $startDate, $endDate, 0, 0);
+            } else if ($ageGroup == "toddler"){
+                $query8 = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                        $startDate, $endDate, 1, 4);
+            } else if ($ageGroup == "child"){
+                $query8 = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                        $startDate, $endDate, 5, 12);
+            } else if ($ageGroup == "teenager"){
+                $query8 = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                        $startDate, $endDate, 13, 17);
+            } else if ($ageGroup == "adult"){
+                $query8 = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                        $startDate, $endDate, 18, 59);
+            } else if ($ageGroup == "elderly"){
+                $query8 = $this->numberOfVictimAgeGroup($disasterEvent, $disasterType, $admLevel, $locationName, 
+                                                        $startDate, $endDate, 60, 999);
+            }
+        }
+        else if ($input['additional_param'] == 4){
+            $status = $input['status'];
+            $query8 = $this->numberOfVictimStatus($disasterEvent, $disasterType, $admLevel, $locationName, 
+                $startDate, $endDate, $status);
+        }
+
+        return $query8;
+
     }
 
     public function query8refugee(){
