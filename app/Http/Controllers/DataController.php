@@ -12,7 +12,6 @@ class DataController extends Controller
 {
 
     public function testDatabase(){
-    	$result = $this->victimMovement("111-56-8948");
         // $result2 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
         // var_dump($result);
         // var_dump($result[0]);
@@ -23,7 +22,7 @@ class DataController extends Controller
         $query1 = $this->disasterEvent("province", "riau", "banjir", '2012-04-01', '2012-05-01');
         # Testing
         $query2 = $this->disasterChanges("D003", null);
-        $query3 = $this->victimMovement("111-56-8948");
+        // $query3 = $this->victimMovement("111-56-8948");
         $query4 = $this->villageAffected("D001", "banjir", "2015-07-23", "2015-07-24");
         $query5 = $this->victimList("D001", "banjir", "village", "Sawahan", "2015-07-23", "2015-07-24");
         $query6 = $this->refugeeCamp("province", "Jawa Timur");
@@ -41,7 +40,7 @@ class DataController extends Controller
     	// return $query8status;
 
         // var_dump($query2);
-        return view('query2')->with('result',$query2);
+        return view('hasilquery2')->with('result',$query2);
     }
 
     public function query1(){
@@ -65,12 +64,14 @@ class DataController extends Controller
         return $query2;
     }
 
-    public function query3(){
-        $victimNik = Input::get('victim_nik');
+    public function query3(Request $request){
+        $input = $request->all();
+        $victimNik = $input['victim_nik'];
 
         $query3 = $this->victimMovement($victimNik);
 
-        return $query3;
+        // return $query3;
+        return view('hasilquery3')->with('result',$query3);
     }
 
     public function query4(){
@@ -634,6 +635,11 @@ class DataController extends Controller
     private function addCheckTimeIntersectionQuery($prevQuery, $tableName, $start_timestamp, $end_timestamp){
         $newQuery = "{$prevQuery} AND (({$tableName}.end_time = '1970-01-01'::timestamp AND NOT('{$end_timestamp}'::timestamp <= {$tableName}.start_time)) OR ({$tableName}.end_time != '1970-01-01'::timestamp AND NOT('{$start_timestamp}'::timestamp >= {$tableName}.end_time OR '{$end_timestamp}'::timestamp <= {$tableName}.start_time)))";
         return $newQuery;
+    }
+
+    public function userquery3(){
+
+        return view('query3');
     }
 
 }

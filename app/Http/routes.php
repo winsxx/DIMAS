@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('land', ['uses' => 'DataController@testDatabase']);
+Route::get('query3','DataController@userquery3');
 Route::post('query1','DataController@query1');
 Route::post('query2','DataController@query2');
 Route::post('query3','DataController@query3');
