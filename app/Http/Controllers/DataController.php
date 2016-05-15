@@ -54,7 +54,9 @@ class DataController extends Controller
 
         $query1 = $this->disasterEvent($admLevel, $locationName, $disasterType, $startDate, $endDate);
 
-        return $query1;
+        // var_dump($query1);
+
+        return view('hasilquery1')->with('result',$query1);
     }
 
     public function query2(Request $request){
@@ -295,7 +297,7 @@ class DataController extends Controller
 
     # Query no 1
     private function disasterEvent($admLevel, $name, $type, $start_timestamp, $end_timestamp){
-        $query = "SELECT DISTINCT disaster_coverage.disaster_id FROM disaster_coverage, village WHERE ST_Intersects(disaster_coverage.geom, village.geom)";
+        $query = "SELECT DISTINCT disaster_coverage.disaster_id, ST_AsGeoJSON(disaster_coverage.geom) FROM disaster_coverage, village WHERE ST_Intersects(disaster_coverage.geom, village.geom)";
 
         # administration level and name
         if(isset($admLevel) && isset($name)){

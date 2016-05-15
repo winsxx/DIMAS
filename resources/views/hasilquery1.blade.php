@@ -23,21 +23,32 @@
 
                  @foreach ($result as $key=>$res)
                      <script type="text/javascript">
+
+                        function onEachFeature(feature, layer) {
+                             if (feature.properties && feature.properties.popupContent) {
+                                layer.bindPopup(feature.properties.popupContent);
+                            }
+                        }
+
                         L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw';
                         var key = {!!json_encode($key)!!}
                         var raw_data = {!!json_encode($res)!!};
-                        var village_id = {!!json_encode(json_decode($res->village_id))!!};
+                        var disaster_id = {!!json_encode($res->disaster_id)!!};
                         var geom = {!!json_encode(json_decode($res->st_asgeojson))!!};
                         var coord = geom['coordinates'];
 
                         console.log(key);
                         console.log(raw_data);
+                        console.log(disaster_id);
                         console.log(geom);
                         console.log(coord);
 
                         var component_prop = {
                             "type": "Feature",
-                            "geometry": geom
+                            "geometry": geom,
+                            "properties": {
+                                "popupContent": disaster_id
+                            }
                         };
 
                         var mapid;
@@ -46,7 +57,7 @@
                             mapid = L.mapbox.map('mapid', 'mapbox.streets').setView([coord[0][0][1], coord[0][0][0]], 12);
                         }
 
-                        L.geoJson(component_prop).addTo(mapid);
+                        L.geoJson(component_prop, { onEachFeature: onEachFeature}).addTo(mapid);
 
                     </script>
                 @endforeach
