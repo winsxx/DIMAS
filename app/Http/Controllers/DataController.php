@@ -35,13 +35,13 @@ class DataController extends Controller
             "2015-07-23", "2015-07-24", 20, 40);
         $query8gender = $this->numberOfVictimGender("D001", "banjir", "village", "Sawahan", 
             "2015-07-23", "2015-07-24","M");
-        $query8status = $this->numberOfVictimStatus("D001", "banjir", "village", "Sawahan", 
-            "2015-07-23", "2015-07-24", "missing");
+        $query8status = $this->numberOfVictimStatus("D003", "banjir", "village", "Wates", 
+            "2015-07-23", "2015-07-24", "minor injury");
     	// return $query8status;
 
         // var_dump($query4);
         // return view('hasilquery4')->with('result',$query4);
-        // return $query5;
+        return $query8status;
     }
 
     public function query1(Request $request){
