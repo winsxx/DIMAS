@@ -20,6 +20,8 @@
                 <p>Tidak ada kejadian bencana bersangkutan.</p>
             @else
                 <div id="mapid"></div>
+                </br>
+                <button onclick="simulasi_spatio_temporal()">Simulasikan</button>
 
                 <script type="text/javascript">
                     var iter_koleksi = 1;
@@ -63,8 +65,13 @@
                                 layar = L.geoJson(component_prop).addTo(mapid);
 
                                 iter_koleksi += 1;
+                                console.log("akhir looping");
                             }
 
+                        }
+
+                        function simulasi_spatio_temporal(){
+                            var myInterval = setInterval(nguji,2000);
                         }
 
                         var key = {!!json_encode($key)!!};
@@ -95,8 +102,9 @@
 
                         if (key == ukuran_data_awal-1){
                             console.log('finish');
-                            var myInterval = setInterval(nguji,3000);
+                            // var myInterval = setInterval(nguji,2000);
                         }
+
 
                     @endforeach
                 </script>

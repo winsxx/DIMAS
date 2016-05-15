@@ -42,7 +42,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div class="footer-text">
             <p>Copyright © 2016 DIMAS - Bandung</p>
             <p>Template By<a href="http://w3layouts.com/"> W3layouts</a></p>
-            <a href="#home" class="scroll"><img src="/images/top-img.png" alt=""></a>
         </div>
     </div>
 </div>
