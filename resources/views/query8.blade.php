@@ -45,13 +45,13 @@
             <label for="start_date" class="col-sm-3 control-label">Start Date</label>
 
             <div class="col-sm-6">
-                <input class="form-control" name="start_date" id="start_date">
+                <input class="form-control" name="start_date" id="start_date" placeholder="YYYY-MM-DD">
             </div>
 
             <label for="end_date" class="col-sm-3 control-label">End Date</label>
 
             <div class="col-sm-6">
-                <input class="form-control" name="end_date" id="end_date">
+                <input class="form-control" name="end_date" id="end_date" placeholder="YYYY-MM-DD">
             </div>
 
             <label for="additional_param" class="col-sm-3 control-label">Parameter Query Tambahan</label>
